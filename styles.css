@@ -1,0 +1,85 @@
+/* Variables */
+
+:root {
+    --red: #ff0000;
+    --green: #27a300;
+    --dark-green: #005c00;
+    --gold: #ffa200;
+}
+
+/* Animation */
+
+@keyframes fadeIn {
+    0% {opacity: 0;}
+    100% {opacity: 1}
+}
+
+/* Structure */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    background: linear-gradient(var(--green), var(--dark-green));
+    min-height: 100vh;
+    text-align: center;
+}
+
+pre {
+    display: inline-block;
+}
+
+#select-wrapper {
+    margin-top: 4rem;
+}
+
+
+
+
+#submit-btn {
+    margin-top: 1.8rem;
+    font-size: 1.5rem;
+    padding: .4rem;
+    border-radius: .6rem;
+    background-color: var(--red);
+    color: whitesmoke;
+    font-weight: bold;
+    cursor: pointer;
+}
+/* Typography */ 
+
+h1 {
+    font-family: "Brush Script MT", serif;
+    font-size: 4rem;
+    margin-top: 6rem;
+    color: whitesmoke;
+}
+
+#output-p {
+    margin-top: 2.5rem;
+    font-size: 2rem;
+}
+
+#output {
+    margin-top: 2.5rem;
+    color: var(--gold);
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-shadow: 1px 1px 4px whitesmoke;
+    
+}
+
+.output-animation {
+    animation: fadeIn 3.5s;
+}
+
+#name-label, #name {
+    font-size: 1.6rem;
+}
+
+
+
