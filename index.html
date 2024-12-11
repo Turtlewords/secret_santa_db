@@ -12,10 +12,10 @@
             <h1>Merry Christmas Santa!</h1>
             <p id="output-p">This year, you'll be Santa for: <span id="output">???</span></p>
             <div id="select-wrapper">
-                <form>
+                <form id="myForm">
                     <label for="name" id="name-label">Select your name:</label>
-                    <select name="name" id="name">
-                        <option selected disabled>Select Below</option>
+                    <select name="name" id="name" required>
+                        <option selected disabled value="select">Select Below</option>
                         <option id="chikuK" value="0">Chiku K</option>
                         <option id="teddy" value="1">Teddy</option>
                         <option id="kiyo" value="2">Kiyo</option>
@@ -28,7 +28,7 @@
                         <option id="wambui" value="9">Wambui</option>
                     </select>
                     <br>
-                    <button type="button" id="submit-btn">Submit</button>
+                    <input type="submit" id="submit-btn">
                 </form>
             </div>
         </main>
@@ -64,13 +64,58 @@
             const submitBtn = document.getElementById("submit-btn");
             const dropDown = document.getElementById("name");
 
-            submitBtn.addEventListener("click", findData)
+            submitBtn.addEventListener("click", alertTest)
+            
 
 
+           let form = document.getElementById("myForm");
+
+           function handleForm(event) {
+            event.preventDefault();
+           }
+
+           form.addEventListener('submit', handleForm)
+
+           function handleSelect() {
+            if (dropDown.options[dropDown.selectedIndex].value == "select") {
+                alert("Plese select a name from the dropdown menu");
+                return;
+            }
+           }
 
             function santaTime() {
+                handleSelect();
+                findData();
                 
             } 
+
+            function findSize() {
+
+                const namesRef = db.collection("names");
+                const snapshot = namesRef.count().get();
+                const count = snapshot.data().count;
+                output.innerHTML = count;
+
+
+            }
+
+            function getCount() {
+                const dbref = ref(db);
+                
+
+                get(child(dbref, "counter"))
+                .then((snapshot) => {
+                    if(snapshot.exists()) {
+                        return typeof snapshot.val();
+                    } else {
+                        alert("Count error. Please try again.")
+                    }
+                })
+                .catch((error) => {
+                    alert(error);
+                });
+                
+            }
 
             function removeData() {
                 remove(ref(db, "names/" + dropDown.options[dropDown.selectedIndex].value))
@@ -88,9 +133,12 @@
                 get(child(dbref, "names/" + random())) 
                 .then((snapshot) => {
                     if (snapshot.exists()) {
+                        output.classList.add("output-animation");
                         output.innerHTML = snapshot.val();
+                        setTimeout(() => {
+                            output.classList.remove("output-animation")}, 3000);
                     } else {
-                        alert("No data found");
+                        alert("Oops. Try again.")
                     }
                 })
                 .catch((error) => {
@@ -98,9 +146,15 @@
                 })
             }
 
+            function alertTest() {
+                
+                alert(getCount());
+            }
+
             function random() {
-                let id = Math.floor(Math.random() * 10)
-                if (Math.floor(Math.random() * 10) != dropDown.options[dropDown.selectedIndex].value) {
+                let count = getCount();
+                let id = Math.floor(Math.random() * count)
+                if (id == dropDown.options[dropDown.selectedIndex].value) {
                     random();
                 } else {
                     return id;

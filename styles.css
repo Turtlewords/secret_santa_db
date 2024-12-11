@@ -74,7 +74,7 @@ h1 {
 }
 
 .output-animation {
-    animation: fadeIn 3.5s;
+    animation: fadeIn 3s;
 }
 
 #name-label, #name {
