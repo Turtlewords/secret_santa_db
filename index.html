@@ -59,7 +59,7 @@
             const app = initializeApp(firebaseConfig);
             
             
-            import { getDatabase, get, remove, ref, child } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+            import { getDatabase, get, remove, ref, child, update } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
 
             const db = getDatabase();
 
@@ -72,6 +72,7 @@
             let hasSelected = false;
             let paperHeader = document.getElementById("paper-header");
             let hasHeader = false;
+            
 
             submitBtn.addEventListener("click", santaTime)
             form.addEventListener('submit', handleForm)
@@ -157,6 +158,7 @@
             } 
 
             
+            
 
             
 
@@ -173,13 +175,12 @@
             function findData() {
                 const dbref = ref(db);
 
-                get(child(dbref, "names/" + random())) 
+                get(child(dbref, "names/" + dropDown.options[dropDown.selectedIndex].value)) 
                 .then((snapshot) => {
                     if (snapshot.exists()) {
-                        output.classList.add("output-animation");
-                        output.innerHTML = snapshot.val();
-                        setTimeout(() => {
-                            output.classList.remove("output-animation")}, 3000);
+                        if (snapshot.val().selected == true) {
+                            hasSelected = true;
+                        }
                     } else {
                         alert("Oops. Try again.")
                     }
