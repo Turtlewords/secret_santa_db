@@ -44,7 +44,6 @@
            
             import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
             
-            
             const firebaseConfig = {
               apiKey: "AIzaSyCbIMXoB9nXwEECf-I5MxWw4JzU4ziXJQg",
               authDomain: "secret-santa-ef5e1.firebaseapp.com",
@@ -56,36 +55,26 @@
               measurementId: "G-0X2LFTVNKN"
             };
           
-            
             const app = initializeApp(firebaseConfig);
-            
             
             import { getDatabase, get, remove, ref, child, update } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
 
             const db = getDatabase();
 
 
-
             const submitBtn = document.getElementById("submit-btn");
             const dropDown = document.getElementById("name");
             let form = document.getElementById("myForm");
             let nameList = document.getElementById("paper-list");
-            
-            let hasSelected = false;
             let paperHeader = document.getElementById("paper-header");
             let hasHeader = false;
-            
+            let hasSelected = false;
 
             submitBtn.addEventListener("click", santaTime)
-
-            // test event listener below 
-            //submitBtn.addEventListener("click", selectTest)
             dropDown.addEventListener("change", hasUserSelected);
             form.addEventListener('submit', handleForm)
 
-            
-           
-
+    
            function handleForm(event) {
             event.preventDefault();
            }
@@ -121,11 +110,9 @@
            function selectName(e) {
             let id = dropDown.options[dropDown.selectedIndex].value;
 
-            
-
             if (!hasSelected) {
                 if (dropDown.options[dropDown.selectedIndex].value == e.target.id) {
-                    alert("You cannot choose yourself!")
+                    alert("You cannot choose yourself! Please pick another card.")
                 } else {
                     e.target.style.color = "black";
                     hasSelected = true;
@@ -138,27 +125,17 @@
            }
 
            function updateSelectedStatus(id) {
-            update(ref(db, "names/" + id), {
+            update(ref(db, "users/" + id), {
                 selected: true
             })
            }
 
-           function selectTest() {
-            const dbref = ref(db);
-
-            get(child(dbref, "names/" + dropDown.options[dropDown.selectedIndex].value))
-            .then((snapshot) => {
-                alert(snapshot.val().selected)
-            })
-            .catch((error) => {
-                alert(error);
-            })
-           }
+        
 
            function hasUserSelected() {
             const dbref = ref(db);
 
-            get(child(dbref, "names/" + dropDown.options[dropDown.selectedIndex].value))
+            get(child(dbref, "users/" + dropDown.options[dropDown.selectedIndex].value))
             .then((snapshot) => {
                 if (snapshot.val().selected == true) {
                     hasSelected = true;
@@ -191,15 +168,11 @@
                     return;
                 } else {
                     addHeader();
-                getNames();
+                    getNames();
                 }
                 
             } 
 
-            
-            
-
-            
 
             function removeData(e) {
                 remove(ref(db, "names/" + e.target.id))
@@ -210,29 +183,7 @@
                     alert(error)
                 });
             }
-
-            function findData() {
-                const dbref = ref(db);
-
-                get(child(dbref, "names/" + dropDown.options[dropDown.selectedIndex].value)) 
-                .then((snapshot) => {
-                    if (snapshot.exists()) {
-                        if (snapshot.val().selected == true) {
-                            hasSelected = true;
-                        }
-                    } else {
-                        alert("Oops. Try again.")
-                    }
-                })
-                .catch((error) => {
-                    //alert(error);
-                })
-            }
-
-            
             
           </script>
     </body>
-
-
 </html>
