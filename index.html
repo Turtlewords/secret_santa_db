@@ -9,12 +9,13 @@
     </head>
     <body>
         <main>
-            <h1>Merry Christmas Santa!</h1>
+            <h1 class="text-outline">Xmas in Texas!</h1>
             <div id="select-wrapper">
                 <form id="myForm">
-                    <label for="name" id="name-label">Select your name:</label>
-                    <select name="name" id="name" required>
-                        <option selected disabled value="select">Select Below</option>
+                    <label for="name" id="name-label" class="text-outline">Select your name:</label>
+                    <br>
+                    <select name="name" id="name" form="myForm" required>
+                        <option disabled value>Select Below</option>
                         <option id="ChikuK" value="0">Chiku K</option>
                         <option id="Teddy" value="1">Teddy</option>
                         <option id="Kiyo" value="2">Kiyo</option>
@@ -69,15 +70,20 @@
             const dropDown = document.getElementById("name");
             let form = document.getElementById("myForm");
             let nameList = document.getElementById("paper-list");
+            
             let hasSelected = false;
             let paperHeader = document.getElementById("paper-header");
             let hasHeader = false;
             
 
             submitBtn.addEventListener("click", santaTime)
+
+            // test event listener below 
+            //submitBtn.addEventListener("click", selectTest)
+            dropDown.addEventListener("change", hasUserSelected);
             form.addEventListener('submit', handleForm)
 
-
+            
            
 
            function handleForm(event) {
@@ -88,8 +94,6 @@
             let key = santa.key;
             let value = santa.val();
             
-
-            
             let li = document.createElement("li");
 
             li.classList.add("paper");
@@ -97,28 +101,27 @@
             li.setAttribute("id", value.id);
             li.addEventListener("click", selectName)
             
-
             nameList.appendChild(li);
            }
+
 
            function addHeader() {
 
             if (!hasHeader) {
                 let head = document.createElement("h2");
             head.classList.add("head");
+            head.classList.add("text-outline");
             head.textContent = "Choose from one of the cards below!"
 
             paperHeader.appendChild(head);
             hasHeader = true;
-            }
-            
+            }  
            }
 
-
            function selectName(e) {
-            if (dropDown.options[dropDown.selectedIndex].value == "select") {
-                return;
-            }
+            let id = dropDown.options[dropDown.selectedIndex].value;
+
+            
 
             if (!hasSelected) {
                 if (dropDown.options[dropDown.selectedIndex].value == e.target.id) {
@@ -127,12 +130,43 @@
                     e.target.style.color = "black";
                     hasSelected = true;
                     removeData(e);
+                    updateSelectedStatus(id);
                 }
-            
             } else {
                 alert("You may only select once!");
             }
-                
+           }
+
+           function updateSelectedStatus(id) {
+            update(ref(db, "names/" + id), {
+                selected: true
+            })
+           }
+
+           function selectTest() {
+            const dbref = ref(db);
+
+            get(child(dbref, "names/" + dropDown.options[dropDown.selectedIndex].value))
+            .then((snapshot) => {
+                alert(snapshot.val().selected)
+            })
+            .catch((error) => {
+                alert(error);
+            })
+           }
+
+           function hasUserSelected() {
+            const dbref = ref(db);
+
+            get(child(dbref, "names/" + dropDown.options[dropDown.selectedIndex].value))
+            .then((snapshot) => {
+                if (snapshot.val().selected == true) {
+                    hasSelected = true;
+                }
+            })
+            .catch((error) => {
+                alert(error);
+            })
            }
 
            function getNames() {
