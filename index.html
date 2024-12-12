@@ -15,7 +15,7 @@
                     <label for="name" id="name-label" class="text-outline">Select your name:</label>
                     <br>
                     <select name="name" id="name" form="myForm" required>
-                        <option disabled value>Select Below</option>
+                        <option selected hidden disabled value="placeholder">Select Below</option>
                         <option id="ChikuK" value="0">Chiku K</option>
                         <option id="Teddy" value="1">Teddy</option>
                         <option id="Kiyo" value="2">Kiyo</option>
@@ -186,9 +186,14 @@
            
 
             function santaTime() {
-                
-                addHeader();
+                if (dropDown.options[dropDown.selectedIndex].value == "placeholder") {
+                    alert("Please select a name")
+                    return;
+                } else {
+                    addHeader();
                 getNames();
+                }
+                
             } 
 
             
