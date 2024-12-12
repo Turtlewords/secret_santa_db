@@ -15,16 +15,16 @@
                     <label for="name" id="name-label">Select your name:</label>
                     <select name="name" id="name" required>
                         <option selected disabled value="select">Select Below</option>
-                        <option id="chikuK" value="0">Chiku K</option>
-                        <option id="teddy" value="1">Teddy</option>
-                        <option id="kiyo" value="2">Kiyo</option>
-                        <option id="obed" value="3">Obed</option>
-                        <option id="chikuM" value="4">Chiku M</option>
-                        <option id="jayla" value="5">Jayla</option>
-                        <option id="jayden" value="6">Jayden</option>
-                        <option id="phonso" value="7">Phonso</option>
-                        <option id="jochebed" value="8">Jochebed</option>
-                        <option id="wambui" value="9">Wambui</option>
+                        <option id="ChikuK" value="0">Chiku K</option>
+                        <option id="Teddy" value="1">Teddy</option>
+                        <option id="Kiyo" value="2">Kiyo</option>
+                        <option id="Obed" value="3">Obed</option>
+                        <option id="ChikuM" value="4">Chiku M</option>
+                        <option id="Jayla" value="5">Jayla</option>
+                        <option id="Jayden" value="6">Jayden</option>
+                        <option id="Phonso" value="7">Phonso</option>
+                        <option id="Jochebed" value="8">Jochebed</option>
+                        <option id="Wambui" value="9">Wambui</option>
                     </select>
                     <br>
                     <input type="submit" id="submit-btn">
@@ -35,13 +35,7 @@
             </div>
             <div id="paper-container">
                 <ul id="paper-list">
-                    <!-- <li class="paper">Chiku</li>
-                    <li class="paper">Teddy</li>  
-                    <li class="paper">Jesus</li>
-                    <li class="paper">Jochebed</li>
-                    <li class="paper">Donut</li>
-                    <li class="paper">Beaver</li>
-                    <li class="paper">Napkin</li> -->
+                    
                 </ul>
             </div>
         </main>
@@ -63,7 +57,7 @@
           
             
             const app = initializeApp(firebaseConfig);
-            //firebase.initializeApp(firebaseConfig); 
+            
             
             import { getDatabase, get, remove, ref, child } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
 
@@ -77,6 +71,7 @@
             let nameList = document.getElementById("paper-list");
             let hasSelected = false;
             let paperHeader = document.getElementById("paper-header");
+            let hasHeader = false;
 
             submitBtn.addEventListener("click", santaTime)
             form.addEventListener('submit', handleForm)
@@ -106,16 +101,24 @@
            }
 
            function addHeader() {
-            let head = document.createElement("h2");
+
+            if (!hasHeader) {
+                let head = document.createElement("h2");
             head.classList.add("head");
             head.textContent = "Choose from one of the cards below!"
 
             paperHeader.appendChild(head);
-
+            hasHeader = true;
+            }
+            
            }
 
 
            function selectName(e) {
+            if (dropDown.options[dropDown.selectedIndex].value == "select") {
+                return;
+            }
+
             if (!hasSelected) {
                 if (dropDown.options[dropDown.selectedIndex].value == e.target.id) {
                     alert("You cannot choose yourself!")
@@ -148,6 +151,7 @@
            
 
             function santaTime() {
+                
                 addHeader();
                 getNames();
             } 
@@ -159,7 +163,7 @@
             function removeData(e) {
                 remove(ref(db, "names/" + e.target.id))
                 .then(() => {
-                    alert("Data removed");
+                    
                 })
                 .catch((error) => {
                     alert(error)
@@ -186,9 +190,7 @@
             }
 
             
-            //window.addEventListener("load", getNames);
             
-
           </script>
     </body>
 
