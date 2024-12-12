@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Secret Santa!</title>
         <link rel="icon" type="image/x-icon" href="images/santa-icon.png">
         <link rel="stylesheet" href="styles.css">
@@ -29,6 +29,9 @@
                     <br>
                     <input type="submit" id="submit-btn">
                 </form>
+            </div>
+            <div id="paper-header">
+
             </div>
             <div id="paper-container">
                 <ul id="paper-list">
@@ -73,9 +76,9 @@
             let form = document.getElementById("myForm");
             let nameList = document.getElementById("paper-list");
             let hasSelected = false;
-            
+            let paperHeader = document.getElementById("paper-header");
 
-            submitBtn.addEventListener("click", getNames)
+            submitBtn.addEventListener("click", santaTime)
             form.addEventListener('submit', handleForm)
 
 
@@ -94,7 +97,6 @@
             let li = document.createElement("li");
 
             li.classList.add("paper");
-            li.classList.add("name-cover");
             li.innerHTML = value.nameOfSanta;
             li.setAttribute("id", value.id);
             li.addEventListener("click", selectName)
@@ -103,12 +105,34 @@
             nameList.appendChild(li);
            }
 
+           function addHeader() {
+            let head = document.createElement("h2");
+            head.classList.add("head");
+            head.textContent = "Choose from one of the cards below!"
+
+            paperHeader.appendChild(head);
+
+           }
+
 
            function selectName(e) {
-            alert(e.target.id);
+            if (!hasSelected) {
+                if (dropDown.options[dropDown.selectedIndex].value == e.target.id) {
+                    alert("You cannot choose yourself!")
+                } else {
+                    e.target.style.color = "black";
+                    hasSelected = true;
+                    removeData(e);
+                }
+            
+            } else {
+                alert("You may only select once!");
+            }
+                
            }
 
            function getNames() {
+
                 const dbref = ref(db);
                 let listOfNames = document.querySelectorAll(".paper");
 
@@ -124,17 +148,16 @@
            
 
             function santaTime() {
-                handleSelect();
-                findData();
-                
+                addHeader();
+                getNames();
             } 
 
             
 
             
 
-            function removeData() {
-                remove(ref(db, "names/" + dropDown.options[dropDown.selectedIndex].value))
+            function removeData(e) {
+                remove(ref(db, "names/" + e.target.id))
                 .then(() => {
                     alert("Data removed");
                 })

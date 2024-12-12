@@ -7,13 +7,6 @@
     --gold: #ffa200;
 }
 
-/* Animation */
-
-@keyframes fadeIn {
-    0% {opacity: 0;}
-    100% {opacity: 1}
-}
-
 /* Structure */
 
 * {
@@ -69,6 +62,7 @@ pre {
     align-items: center;
     justify-content: center;
     background-color: whitesmoke;
+    color: whitesmoke;
     margin: 1rem;
     list-style-type: none;
     width: 100px;
@@ -79,10 +73,7 @@ pre {
 
 }
 
-.name-cover {
-    background-color: lightblue;
-    opacity: 0.3;
-}
+
 /* Typography */ 
 
 h1 {
@@ -95,6 +86,12 @@ h1 {
 #output-p {
     margin-top: 2.5rem;
     font-size: 2rem;
+}
+
+.head {
+    margin-top: 2.5rem;
+    font-size: 2rem;
+    color: var(--gold);
 }
 
 #output {
@@ -113,6 +110,8 @@ h1 {
 #name-label, #name {
     font-size: 1.6rem;
 }
+
+
 
 
 
