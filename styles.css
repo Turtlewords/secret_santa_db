@@ -50,6 +50,39 @@ pre {
     font-weight: bold;
     cursor: pointer;
 }
+
+#paper-container {
+    margin: 2rem auto;
+    width: 400px;
+    height: 400px;
+
+}
+
+#paper-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.paper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: whitesmoke;
+    margin: 1rem;
+    list-style-type: none;
+    width: 100px;
+    height: 60px;
+    vertical-align: center;
+    border-radius: 10px;
+    font-size: 1.4rem;
+
+}
+
+.name-cover {
+    background-color: lightblue;
+    opacity: 0.3;
+}
 /* Typography */ 
 
 h1 {
@@ -80,6 +113,8 @@ h1 {
 #name-label, #name {
     font-size: 1.6rem;
 }
+
+
 
 
 

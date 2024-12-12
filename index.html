@@ -10,7 +10,6 @@
     <body>
         <main>
             <h1>Merry Christmas Santa!</h1>
-            <p id="output-p">This year, you'll be Santa for: <span id="output">???</span></p>
             <div id="select-wrapper">
                 <form id="myForm">
                     <label for="name" id="name-label">Select your name:</label>
@@ -31,16 +30,23 @@
                     <input type="submit" id="submit-btn">
                 </form>
             </div>
+            <div id="paper-container">
+                <ul id="paper-list">
+                    <!-- <li class="paper">Chiku</li>
+                    <li class="paper">Teddy</li>  
+                    <li class="paper">Jesus</li>
+                    <li class="paper">Jochebed</li>
+                    <li class="paper">Donut</li>
+                    <li class="paper">Beaver</li>
+                    <li class="paper">Napkin</li> -->
+                </ul>
+            </div>
         </main>
         <script type="module">
-            // Import the functions you need from the SDKs you need
+           
             import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
             
-            // TODO: Add SDKs for Firebase products that you want to use
-            // https://firebase.google.com/docs/web/setup#available-libraries
-          
-            // Your web app's Firebase configuration
-            // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+            
             const firebaseConfig = {
               apiKey: "AIzaSyCbIMXoB9nXwEECf-I5MxWw4JzU4ziXJQg",
               authDomain: "secret-santa-ef5e1.firebaseapp.com",
@@ -52,36 +58,70 @@
               measurementId: "G-0X2LFTVNKN"
             };
           
-            // Initialize Firebase
+            
             const app = initializeApp(firebaseConfig);
+            //firebase.initializeApp(firebaseConfig); 
             
             import { getDatabase, get, remove, ref, child } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
 
             const db = getDatabase();
 
 
-            const output = document.getElementById("output");
+
             const submitBtn = document.getElementById("submit-btn");
             const dropDown = document.getElementById("name");
-
-            submitBtn.addEventListener("click", alertTest)
+            let form = document.getElementById("myForm");
+            let nameList = document.getElementById("paper-list");
+            let hasSelected = false;
             
 
+            submitBtn.addEventListener("click", getNames)
+            form.addEventListener('submit', handleForm)
 
-           let form = document.getElementById("myForm");
+
+           
 
            function handleForm(event) {
             event.preventDefault();
            }
 
-           form.addEventListener('submit', handleForm)
+           function addItemsToList(santa) {
+            let key = santa.key;
+            let value = santa.val();
+            
 
-           function handleSelect() {
-            if (dropDown.options[dropDown.selectedIndex].value == "select") {
-                alert("Plese select a name from the dropdown menu");
-                return;
-            }
+            
+            let li = document.createElement("li");
+
+            li.classList.add("paper");
+            li.classList.add("name-cover");
+            li.innerHTML = value.nameOfSanta;
+            li.setAttribute("id", value.id);
+            li.addEventListener("click", selectName)
+            
+
+            nameList.appendChild(li);
            }
+
+
+           function selectName(e) {
+            alert(e.target.id);
+           }
+
+           function getNames() {
+                const dbref = ref(db);
+                let listOfNames = document.querySelectorAll(".paper");
+
+                if (listOfNames.length == 0) {
+                    get(child(dbref, 'names')).then((names) => {
+                        names.forEach(santa => {
+                            addItemsToList(santa);
+                        })
+                    })
+                }
+                
+           }
+           
 
             function santaTime() {
                 handleSelect();
@@ -89,33 +129,9 @@
                 
             } 
 
-            function findSize() {
+            
 
-                const namesRef = db.collection("names");
-                const snapshot = namesRef.count().get();
-                const count = snapshot.data().count;
-                output.innerHTML = count;
-
-
-            }
-
-            function getCount() {
-                const dbref = ref(db);
-                
-
-                get(child(dbref, "counter"))
-                .then((snapshot) => {
-                    if(snapshot.exists()) {
-                        return typeof snapshot.val();
-                    } else {
-                        alert("Count error. Please try again.")
-                    }
-                })
-                .catch((error) => {
-                    alert(error);
-                });
-                
-            }
+            
 
             function removeData() {
                 remove(ref(db, "names/" + dropDown.options[dropDown.selectedIndex].value))
@@ -146,20 +162,9 @@
                 })
             }
 
-            function alertTest() {
-                
-                alert(getCount());
-            }
-
-            function random() {
-                let count = getCount();
-                let id = Math.floor(Math.random() * count)
-                if (id == dropDown.options[dropDown.selectedIndex].value) {
-                    random();
-                } else {
-                    return id;
-                }
-            }
+            
+            //window.addEventListener("load", getNames);
+            
 
           </script>
     </body>
