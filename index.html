@@ -70,6 +70,7 @@
             
             let hasHeader = false;
             let hasSelected = false;
+            
 
             submitBtn.addEventListener("click", santaTime)
             dropDown.addEventListener("change", hasUserSelected);
@@ -131,7 +132,22 @@
             })
            }
 
-        
+           
+
+           function checkForNames() {
+            const dbref = ref(db);
+
+            get(child(dbref, "names"))
+            .then((snapshot) => {
+                if(snapshot.exists()) {
+                    addHeader();
+                } else {
+                    alert("No more names to choose!")
+                }
+            }).catch((error) => {
+                alert("No more names to choose!")
+            })
+           }
 
            function hasUserSelected() {
             const dbref = ref(db);
@@ -147,7 +163,7 @@
             })
            }
 
-           function getNames() {
+            function getNames() {
 
                 const dbref = ref(db);
                 let listOfNames = document.querySelectorAll(".paper");
@@ -160,16 +176,19 @@
                     })
                 }
                 
-           }
+           } 
+
+           
            
 
             function santaTime() {
                 if (dropDown.options[dropDown.selectedIndex].value == "placeholder") {
                     alert("Please select a name")
                     return;
-                } else {
-                    addHeader();
+                }  else {
+                    
                     getNames();
+                    checkForNames()
                 }
                 
             } 
